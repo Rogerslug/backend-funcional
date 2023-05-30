@@ -4,15 +4,20 @@ const Product = require('../models/Product');
 // Define los controladores para los productos
 const productController = {};
 
+//Con esta función llamamos a todos los productos usando GET en /Productos
 productController.getAllProducts = async (req, res) => {
-    try {
+    try { 
+      // Se intenta obtener todos los productos de la BD
       const products = await Product.find();
+      // Se envía la respuesta si hay éxito 
       res.json(products);
     } catch (err) {
+      // Si algo llega a fallar, se devuelve un error de servidor 
       res.status(500).send(err);
     }
   };
 
+//Busca un producto usando un GET a '/products/:id'
 productController.getProductById = async (req, res) => {
     try {
       const product = await Product.findById(req.params.id);
