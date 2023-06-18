@@ -31,6 +31,7 @@ productController.getProductById = async (req, res) => {
     }
   };
 
+//POST
 productController.createProduct = async (req, res) => {
     try {
       const product = new Product(req.body);
@@ -41,7 +42,7 @@ productController.createProduct = async (req, res) => {
     }
   };
 
-
+//PUT
 productController.updateProduct = async (req, res) => {
     try {
       const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -55,6 +56,7 @@ productController.updateProduct = async (req, res) => {
     }
   };
 
+//DELETE
 productController.deleteProduct = async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndRemove(req.params.id);
