@@ -1,17 +1,20 @@
-// Importa React y los componentes
+// Importa React y los componentes de React Router
 import React from 'react';
-import ProductList from './ProductList';
-import Cart from './Cart';
-import LoginForm from './LoginForm';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ProductList from './components/ProductList';
+import Cart from './components/Cart';
+import LoginForm from './components/LoginForm';
 
 // Define el componente App
 function App() {
   return (
-    <div>
-      <ProductList />
-      <Cart />
-      <LoginForm />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/products" element={<ProductList />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/login" element={<LoginForm />} />
+      </Routes>
+    </Router>
   );
 }
 
