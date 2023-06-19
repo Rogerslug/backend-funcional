@@ -5,7 +5,7 @@ const Product = require('../models/Product');
 const productController = {};
 
 // Esta función maneja la petición GET para obtener todos los productos
-productController.getAllProducts = async (res) => {
+productController.getAllProducts = async (req, res) => {
   try {
     // Intenta obtener todos los productos de la base de datos
     const products = await Product.find();
