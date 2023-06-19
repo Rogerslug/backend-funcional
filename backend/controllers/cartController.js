@@ -24,13 +24,13 @@ cartController.addProductToCart = async (req, res) => {
   try {
     const product = await Product.findById(req.body.productId);
     if (product) {
-      const cart = await Cart.findOne({ user: req.params.userId });
+      const cart = await Cart.findOne({ user: req.body.user });
       if (cart) {
         cart.products.push(product);
         const updatedCart = await cart.save();
         res.json(updatedCart);
       } else {
-        const newCart = new Cart({ user: req.paramsuserId, products: [product] });
+        const newCart = new Cart({ user: req.body.user, products: [product] });
         const savedCart = await newCart.save();
         res.json(savedCart);
       }
