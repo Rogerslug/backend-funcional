@@ -1,4 +1,25 @@
-import logo from './logo.svg';
+// Importa React y los componentes
+import React from 'react';
+import ProductList from './ProductList';
+import Cart from './Cart';
+import LoginForm from './LoginForm';
+
+// Define el componente App
+function App() {
+  return (
+    <div>
+      <ProductList />
+      <Cart />
+      <LoginForm />
+    </div>
+  );
+}
+
+// Exporta el componente App
+export default App;
+
+
+/* import logo from './logo.svg';
 import './App.css';
 
 function App() {
@@ -23,3 +44,4 @@ function App() {
 }
 
 export default App;
+ */
