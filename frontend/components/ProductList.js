@@ -1,5 +1,6 @@
-// Importa React y el hook useEffect
+// Importa React, los hooks de React y os componentes de Material-UI
 import React, { useState, useEffect } from 'react';
+import { Container, Card, CardContent, Typography } from '@mui/material';
 
 // Define el componente ProductList
 function ProductList() {
@@ -23,15 +24,17 @@ function ProductList() {
   }, []);
 
   return (
-    <div>
-      <h1>Lista de productos</h1>
+    <Container>
+      <Typography variant='h2'>Lista de productos</Typography>
       {products.map((product) => (
-        <div key={product._id}>
-          <h2>{product.name}</h2>
-          <p>{product.price}</p>
-        </div>
+        <Card key={product.id}>
+          <CardContent>
+            <Typography variant='h5'>{product.name}</Typography>
+            <Typography variant='body1'>{product.price}</Typography>
+          </CardContent>
+        </Card>
       ))}
-    </div>
+    </Container>
   );
 }
 
