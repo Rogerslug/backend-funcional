@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 // Importa el controlador de productos
-const productController = require('../controllers/productController').default;
+const productController = require('../controllers/productController');
 
 // Define la ruta para obtener todos los productos
 router.get('/', productController.getAllProducts);
