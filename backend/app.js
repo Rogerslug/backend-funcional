@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes'); 
+const cors = require('cors');
 
 // Conecta a MongoDB
 mongoose.connect('mongodb://127.0.0.1/my_database', {
@@ -16,6 +17,7 @@ const app = express();
 
 // Middleware para interpretar cuerpos de solicitudes JSON
 app.use(express.json());
+app.use(cors());
 
 // Usa las rutas del producto, usuarios y carrito
 app.use('/products', productRoutes);

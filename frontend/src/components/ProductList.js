@@ -1,42 +1,61 @@
-// Importa React, los hooks de React y os componentes de Material-UI
 import React, { useState, useEffect } from 'react';
-import { Container, Card, CardContent, Typography } from '@mui/material';
+import { Container, Typography, CircularProgress } from '@mui/material';
+import Product from './Product';
+import ProductForm from './ProductForm';
 
-// Define el componente ProductList
 function ProductList() {
-  // Define el estado para los productos
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Define una función para obtener los productos
-  const getProducts = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/products');
-      const data = await response.json();
-      setProducts(data);
-    } catch (err) {
-      console.error('Error al obtener los productos:', err);
-    }
+  useEffect(() => {
+    fetch('http://localhost:5000/products')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al obtener los productos');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setProducts(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const handleCreate = (product) => {
+    setProducts(prevProducts => [...prevProducts, product]);
   };
 
-  // Usa el hook useEffect para obtener los productos cuando el componente se monta
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const handleUpdate = (updatedProduct) => {
+    setProducts(prevProducts => prevProducts.map(product => product._id === updatedProduct._id ? updatedProduct : product));
+  };
+
+  const handleDelete = (productId) => {
+    setProducts(prevProducts => prevProducts.filter(product => product._id !== productId));
+  };
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <Container>
       <Typography variant='h2'>Lista de productos</Typography>
       {products.map((product) => (
-        <Card key={product.id}>
-          <CardContent>
-            <Typography variant='h5'>{product.name}</Typography>
-            <Typography variant='body1'>{product.price}</Typography>
-          </CardContent>
-        </Card>
+        <Product key={product._id} product={product} onUpdate={handleUpdate} onDelete={handleDelete} />
       ))}
+      <Typography variant='h4'>Crear producto</Typography>
+      <ProductForm onCreate={handleCreate} />
     </Container>
   );
 }
 
-// Exporta el componente ProductList
 export default ProductList;

@@ -1,37 +1,44 @@
-// Importa React, los hooks de React y los componentes de Material-UI
 import React, { useState, useEffect } from 'react';
 import { Container, Card, CardContent, Typography, Button } from '@mui/material';
 
-// Define el componente Cart
 function Cart() {
-  // Define el estado para el carrito
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(null);
+  const userId = 'userId'; // Reemplaza esto con el ID de usuario real
 
-  // Define una función para obtener el carrito
-  const getCart = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/cart');
-      const data = await response.json();
-      setCart(data);
-    } catch (err) {
-      console.error('Error al obtener el carrito:', err);
-    }
+  useEffect(() => {
+    fetch(`http://localhost:5000/cart/${userId}`)
+      .then(response => response.json())
+      .then(data => setCart(data))
+      .catch(err => console.error(err));
+  }, [userId]);
+
+  const handleRemove = (productId) => {
+    fetch(`http://localhost:5000/cart/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId }),
+    })
+      .then(response => response.json())
+      .then(data => setCart(data))
+      .catch(err => console.error(err));
   };
 
-  // Usa el hook useEffect para obtener el carrito cuando el componente se monta
-  useEffect(() => {
-    getCart();
-  }, []);
+  if (!cart) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container>
-      <Typography variant="h2">Mi carrito</Typography>
-      {cart.map((item) => (
-        <Card key={item._id}>
+      <Typography variant='h2'>Carrito</Typography>
+      {cart.products.map((product) => (
+        <Card key={product._id}>
           <CardContent>
-            <Typography variant="h5">{item.name}</Typography>
-            <Typography variant="body1">{item.price}</Typography>
-            <Button variant="contained" color="primary">
+            <Typography variant='h5'>{product.name}</Typography>
+            <Typography variant='body1'>{product.description}</Typography>
+            <Typography variant='body1'>{product.price}</Typography>
+            <Button variant="contained" color="secondary" onClick={() => handleRemove(product._id)}>
               Eliminar del carrito
             </Button>
           </CardContent>
@@ -41,5 +48,4 @@ function Cart() {
   );
 }
 
-// Exporta el componente Cart
 export default Cart;

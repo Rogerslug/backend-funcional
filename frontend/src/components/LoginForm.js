@@ -1,33 +1,39 @@
-// Importa React y el hook useState
 import React, { useState } from 'react';
+import { Container, TextField, Button, Typography } from '@mui/material';
 
-// Define el componente LoginForm
 function LoginForm() {
-  // Define el estado para los valores de los campos de entrada
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Define las funciones para manejar los cambios en los campos de entrada
-  const handleUsernameChange = (event) => setUsername(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleLogin = () => {
+    fetch('http://localhost:5000/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Aquí deberías manejar el inicio de sesión exitoso, por ejemplo, guardando el token de autenticación y redirigiendo al usuario
+        } else {
+          // Aquí deberías manejar el inicio de sesión fallido, por ejemplo, mostrando un mensaje de error
+        }
+      })
+      .catch(err => console.error(err));
+  };
 
   return (
-    <div>
-      <h1>Inicio de sesión</h1>
-      <form>
-        <label>
-          Nombre de usuario:
-          <input type="text" name="username" value={username} onChange={handleUsernameChange} />
-        </label>
-        <label>
-          Contraseña:
-          <input type="password" name="password" value={password} onChange={handlePasswordChange} />
-        </label>
-        <input type="submit" value="Iniciar sesión" />
-      </form>
-    </div>
+    <Container>
+      <Typography variant='h2'>Iniciar sesión</Typography>
+      <TextField label="Nombre de usuario" variant="outlined" value={username} onChange={e => setUsername(e.target.value)} />
+      <TextField label="Contraseña" variant="outlined" value={password} onChange={e => setPassword(e.target.value)} type="password" />
+      <Button variant="contained" color="primary" onClick={handleLogin}>
+        Iniciar sesión
+      </Button>
+    </Container>
   );
 }
 
-// Exporta el componente LoginForm
 export default LoginForm;
