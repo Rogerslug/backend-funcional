@@ -1,65 +1,65 @@
 // Importa el modelo de producto
-const Product = require('../models/Product');
+import Product, { find, findById, findByIdAndUpdate, findByIdAndRemove } from '../models/Product';
 
 // Define los controladores para los productos
 const productController = {};
 
-//Con esta función llamamos a todos los productos usando GET en /Productos
-productController.getAllProducts = async (req, res) => {
-    try { 
-      // Se intenta obtener todos los productos de la BD
-      const products = await Product.find();
-      // Se envía la respuesta si hay éxito 
-      res.json(products);
-    } catch (err) {
-      // Si algo llega a fallar, se devuelve un error de servidor 
-      res.status(500).send(err);
-    }
-  };
+// Esta función maneja la petición GET para obtener todos los productos
+productController.getAllProducts = async (res) => {
+  try {
+    // Intenta obtener todos los productos de la base de datos
+    const products = await find();
+    // Si tiene éxito, envía los productos como respuesta
+    res.json(products);
+  } catch (err) {
+    // Si algo falla, envía un error de servidor
+    res.status(500).send(err);
+  }
+};
 
-//Busca un producto usando un GET a '/products/:id'
+// Esta función maneja la petición GET para obtener un producto por su id
 productController.getProductById = async (req, res) => {
-    try {
-      const product = await Product.findById(req.params.id);
-      if (product) {
-        res.json(product);
-      } else {
-        res.status(404).send('Producto no encontrado');
-      }
-    } catch (err) {
-      res.status(500).send(err);
+  try {
+    const product = await findById(req.params.id);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).send('Producto no encontrado');
     }
-  };
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-//POST
+// Esta función maneja la petición POST para crear un producto
 productController.createProduct = async (req, res) => {
-    try {
-      const product = new Product(req.body);
-      const savedProduct = await product.save();
-      res.json(savedProduct);
-    } catch (err) {
-      res.status(500).send(err);
-    }
-  };
+  try {
+    const product = new Product(req.body);
+    const savedProduct = await product.save();
+    res.json(savedProduct);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-//PUT
+// Esta función maneja la petición PUT para actualizar un producto
 productController.updateProduct = async (req, res) => {
-    try {
-      const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (updatedProduct) {
-        res.json(updatedProduct);
-      } else {
-        res.status(404).send('Producto no encontrado');
-      }
-    } catch (err) {
-      res.status(500).send(err);
+  try {
+    const updatedProduct = await findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (updatedProduct) {
+      res.json(updatedProduct);
+    } else {
+      res.status(404).send('Producto no encontrado');
     }
-  };
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-//DELETE
+// Esta función maneja la petición DELETE para eliminar un producto
 productController.deleteProduct = async (req, res) => {
   try {
-    const deletedProduct = await Product.findByIdAndRemove(req.params.id);
+    const deletedProduct = await findByIdAndRemove(req.params.id);
     if (deletedProduct) {
       res.json(deletedProduct);
     } else {
@@ -71,4 +71,4 @@ productController.deleteProduct = async (req, res) => {
 };
 
 // Exporta el controlador de productos
-module.exports = productController;
+export default productController;
