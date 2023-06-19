@@ -1,5 +1,5 @@
 // Importa el modelo de producto
-import Product, { find, findById, findByIdAndUpdate, findByIdAndRemove } from '../models/Product';
+const Product = require('../models/Product');
 
 // Define los controladores para los productos
 const productController = {};
@@ -8,7 +8,7 @@ const productController = {};
 productController.getAllProducts = async (res) => {
   try {
     // Intenta obtener todos los productos de la base de datos
-    const products = await find();
+    const products = await Product.find();
     // Si tiene éxito, envía los productos como respuesta
     res.json(products);
   } catch (err) {
@@ -20,7 +20,7 @@ productController.getAllProducts = async (res) => {
 // Esta función maneja la petición GET para obtener un producto por su id
 productController.getProductById = async (req, res) => {
   try {
-    const product = await findById(req.params.id);
+    const product = await Product.findById(req.params.id);
     if (product) {
       res.json(product);
     } else {
@@ -45,7 +45,7 @@ productController.createProduct = async (req, res) => {
 // Esta función maneja la petición PUT para actualizar un producto
 productController.updateProduct = async (req, res) => {
   try {
-    const updatedProduct = await findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (updatedProduct) {
       res.json(updatedProduct);
     } else {
@@ -59,7 +59,7 @@ productController.updateProduct = async (req, res) => {
 // Esta función maneja la petición DELETE para eliminar un producto
 productController.deleteProduct = async (req, res) => {
   try {
-    const deletedProduct = await findByIdAndRemove(req.params.id);
+    const deletedProduct = await Product.findByIdAndRemove(req.params.id);
     if (deletedProduct) {
       res.json(deletedProduct);
     } else {
@@ -71,4 +71,4 @@ productController.deleteProduct = async (req, res) => {
 };
 
 // Exporta el controlador de productos
-export default productController;
+module.exports = productController;
