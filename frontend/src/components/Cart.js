@@ -1,45 +1,33 @@
-// Importa React, los hooks de React y los componentes de Material-UI
 import React, { useState, useEffect } from 'react';
-import { Container, Card, CardContent, Typography, Button } from '@mui/material';
+import { List, ListItem, ListItemText, Button } from '@mui/material';
 
-// Define el componente Cart
 function Cart() {
-  // Define el estado para el carrito
   const [cart, setCart] = useState([]);
 
-  // Define una función para obtener el carrito
-  const getCart = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/cart');
-      const data = await response.json();
-      setCart(data);
-    } catch (err) {
-      console.error('Error al obtener el carrito:', err);
-    }
-  };
-
-  // Usa el hook useEffect para obtener el carrito cuando el componente se monta
   useEffect(() => {
-    getCart();
+    setCart([
+      { id: 1, name: 'Producto 1', price: 100 },
+      { id: 2, name: 'Producto 2', price: 200 },
+    ]);
   }, []);
 
+  const handleRemoveFromCart = (productId) => {
+    setCart(cart.filter(product => product.id !== productId));
+  };
+
   return (
-    <Container>
-      <Typography variant="h2">Mi carrito</Typography>
-      {cart.map((item) => (
-        <Card key={item._id}>
-          <CardContent>
-            <Typography variant="h5">{item.name}</Typography>
-            <Typography variant="body1">{item.price}</Typography>
-            <Button variant="contained" color="primary">
-              Eliminar del carrito
-            </Button>
-          </CardContent>
-        </Card>
+    <List>
+      {cart.map(product => (
+        <ListItem key={product.id}>
+          <ListItemText primary={product.name} secondary={`Precio: ${product.price}`} />
+          <Button variant="contained" color="secondary" onClick={() => handleRemoveFromCart(product.id)}>
+            Eliminar
+          </Button>
+        </ListItem>
       ))}
-    </Container>
+    </List>
   );
 }
 
-// Exporta el componente Cart
 export default Cart;
+ 

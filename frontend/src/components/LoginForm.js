@@ -1,33 +1,63 @@
-// Importa React y el hook useState
 import React, { useState } from 'react';
+import { Container, TextField, Button, Typography } from '@mui/material';
 
-// Define el componente LoginForm
 function LoginForm() {
-  // Define el estado para los valores de los campos de entrada
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useState({ username: '', password: '' });
 
-  // Define las funciones para manejar los cambios en los campos de entrada
-  const handleUsernameChange = (event) => setUsername(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const handleInputChange = (event) => {
+    setUser({ ...user, [event.target.name]: event.target.value });
+  };
+
+  const handleRegister = () => {
+    fetch('http://localhost:5000/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.error(err));
+  };
+
+  const handleLogin = () => {
+    fetch('http://localhost:5000/users')
+      .then(response => response.json())
+      .then(data => {
+        const foundUser = data.find(u => u.username === user.username && u.password === user.password);
+        if (foundUser) {
+          console.log('Inicio de sesión exitoso');
+        } else {
+          console.log('Usuario o contraseña incorrectos');
+        }
+      })
+      .catch(err => console.error(err));
+  };
+
+  const handleDelete = () => {
+    fetch(`http://localhost:5000/users/${user._id}`, {
+      method: 'DELETE',
+    })
+      .then(() => console.log('Usuario eliminado'))
+      .catch(err => console.error(err));
+  };
 
   return (
-    <div>
-      <h1>Inicio de sesión</h1>
-      <form>
-        <label>
-          Nombre de usuario:
-          <input type="text" name="username" value={username} onChange={handleUsernameChange} />
-        </label>
-        <label>
-          Contraseña:
-          <input type="password" name="password" value={password} onChange={handlePasswordChange} />
-        </label>
-        <input type="submit" value="Iniciar sesión" />
-      </form>
-    </div>
+    <Container>
+      <Typography variant='h4'>Iniciar sesión / Registrarse</Typography>
+      <TextField name="username" label="Nombre de usuario" variant="outlined" value={user.username} onChange={handleInputChange} />
+      <TextField name="password" label="Contraseña" variant="outlined" value={user.password} onChange={handleInputChange} type='password'/><Button variant="contained" color="primary" onClick={handleLogin}>
+        Iniciar sesión
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleRegister}>
+        Registrarse
+      </Button>
+      <Button variant="contained" color="secondary" onClick={handleDelete}>
+        Eliminar cuenta
+      </Button>
+    </Container>
   );
 }
 
-// Exporta el componente LoginForm
 export default LoginForm;
