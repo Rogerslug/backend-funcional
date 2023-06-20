@@ -47,9 +47,7 @@ function LoginForm() {
     <Container>
       <Typography variant='h4'>Iniciar sesión / Registrarse</Typography>
       <TextField name="username" label="Nombre de usuario" variant="outlined" value={user.username} onChange={handleInputChange} />
-      <TextField name="password" label="Contraseña" variant="outlined" value={user.password} onChange={handleInputChange} type='password'/>
-    {/* <TextField label="Contraseña" variant="outlined" value={password} onChange={e => setPassword(e.target.value)} type="password" />
- */}      <Button variant="contained" color="primary" onClick={handleLogin}>
+      <TextField name="password" label="Contraseña" variant="outlined" value={user.password} onChange={handleInputChange} type='password'/><Button variant="contained" color="primary" onClick={handleLogin}>
         Iniciar sesión
       </Button>
       <Button variant="contained" color="primary" onClick={handleRegister}>

@@ -17,6 +17,7 @@ const app = express();
 
 // Middleware para interpretar cuerpos de solicitudes JSON
 app.use(express.json());
+// Middleware que habilita el Cors en el navegador
 app.use(cors());
 
 // Usa las rutas del producto, usuarios y carrito
